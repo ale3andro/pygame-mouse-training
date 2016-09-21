@@ -4,6 +4,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
+from gameclass import GameClass
 
 windowsize = (700,700)
 
@@ -37,6 +38,13 @@ def main():
 
     screen.blit(mouse_0, (0, 0))
     screen.blit(thetexts[item_cur-1], (100,100))
+
+    mygame = GameClass()
+    print mygame.get_item()
+    mygame.get_next_item()
+    mygame.get_next_item()
+    mygame.get_next_item()
+    print mygame.get_item()
 
     while 1:
         pygame.display.update()
