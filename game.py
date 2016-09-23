@@ -17,46 +17,16 @@ def main():
     screen = pygame.display.set_mode(windowsize, DOUBLEBUF, 32)
     pygame.display.set_caption("Mouse")
 
-    textfont = pygame.font.SysFont("Ubuntu", 20)
-    thetexts = (textfont.render(u"Αριστερό πλήκτρο", True, (255,0,0), (255,255,0)),
-                    textfont.render(u"Μεσαίο πλήκτρο", True, (255,0,0), (255,255,0)),
-                    textfont.render(u"Δεξί πλήκτρο", True, (255, 0, 0), (255, 255, 0)))
-    systemMessages = (textfont.render(u"Μπράβο", True, (255,0,0), (255,255,0)),
-                      textfont.render(u"Δοκίμασε πάλι", True, (255, 0, 0), (255, 255, 0)))
-
-    mouse_0 = pygame.image.load(mouse0)
-    mouse_1 = pygame.image.load(mouse1)
-    mouse_2 = pygame.image.load(mouse2)
-    mouse_3 = pygame.image.load(mouse3)
-
-    sequence1 = (1, 1, 1, 2, 3, 2, 1, 3, 2, 1, 2, 2, 3)
-    sequence1_index = 0
-    item_cur = sequence1[sequence1_index]
-    sequence1_length = len(sequence1)
-
-    next_item = False
-
-    screen.blit(mouse_0, (0, 0))
-    screen.blit(thetexts[item_cur-1], (100,100))
+    mouse_images = ( pygame.image.load(mouse0), pygame.image.load(mouse1), pygame.image.load(mouse2), pygame.image.load(mouse3))
+    system_images = ( pygame.image.load('images/right.png'), pygame.image.load('images/wrong.png'))
 
     mygame = GameClass()
-    print mygame.get_item()
-    mygame.get_next_item()
-    mygame.get_next_item()
-    mygame.get_next_item()
-    print mygame.get_item()
+    screen.blit(mouse_images[mygame.get_item()], (0,0))
+
+    nextItem = False
 
     while 1:
         pygame.display.update()
-
-        if next_item:
-            sequence1_index = sequence1_index + 1
-            if (sequence1_index==sequence1_length-1):
-                pygame.quit()
-                exit()
-            else:
-                item_cur = sequence1[sequence1_index]
-                next_item = False
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -64,26 +34,22 @@ def main():
                 exit()
 
             if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    screen.blit(mouse_1, (0,0))
-                elif event.button == 3:
-                    screen.blit(mouse_2, (0,0))
-                elif event.button == 2:
-                    screen.blit(mouse_3, (0,0))
-                if (item_cur == event.button):
-                    screen.blit(systemMessages[0], (100, 400))
-                    pygame.display.update()
-                    pygame.time.wait(2000)
-                    next_item = True
+                if (mygame.get_item() == event.button):
+                    screen.blit(system_images[0], (200,200))
+                    nextItem = True
                 else:
-                    screen.blit(systemMessages[1], (100, 400))
-                    pygame.display.update()
-                    pygame.time.wait(2000)
-
+                    screen.blit(system_images[1], (200, 200))
 
             if event.type == MOUSEBUTTONUP:
-                screen.blit(mouse_0, (0, 0))
-                screen.blit(thetexts[item_cur - 1], (100, 100))
+                pygame.time.wait(2000)
+                if (nextItem):
+                    if (mygame.get_next_item()==None):
+                        pygame.quit()
+                    nextItem=False
+                screen.blit(mouse_images[mygame.get_item()], (0, 0))
+
+
+
 
 if __name__ == "__main__":
     main()
