@@ -5,7 +5,6 @@
 class GameClass:
     def __init__(self):
         self.sequence = (1, 1, 1, 2, 3, 2, 1, 3, 2, 1, 2, 2, 3)
-        self.sequence = (1, 2, 3)
         self.sequence_index = 0
         self.sequence_length = len(self.sequence)
 
@@ -18,4 +17,10 @@ class GameClass:
             return None
         self.sequence_index += 1
         return self.get_item()
+
+    def get_items_count(self):
+        return self.sequence_length
+
+    def reset(self):
+        self.sequence_index = 0
 
