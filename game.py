@@ -13,9 +13,6 @@ def printScore(screen, cur_score, max_score):
     thetext = textfont.render(u"Σκορ: " + str(cur_score) + "/" + str(max_score), True, (255, 0, 0), (255, 255, 255))
     screen.blit(thetext, (500, 40))
 
-def gameOver(screen):
-    screen.blit(pygame.image.load('images/gameover.png'), (350,350))
-
 def main():
     pygame.init()
     mouse0 = 'images/mouse0.png'
@@ -28,12 +25,17 @@ def main():
     mouse_images = ( pygame.image.load(mouse0), pygame.image.load(mouse1), pygame.image.load(mouse2), pygame.image.load(mouse3))
     system_images = ( pygame.image.load('images/right.png'), pygame.image.load('images/wrong.png'))
 
+    rect_endGame = Rect(0,0,0,0)
+    rect_playAgain = Rect(0,0,0,0)
+
     mygame = GameClass()
     screen.blit(mouse_images[mygame.get_item()], (0,0))
 
     cur_score = 0
     max_score = mygame.get_items_count()
     printScore(screen, cur_score, max_score)
+
+    endscreenshown = False
 
     while 1:
         pygame.display.update()
@@ -44,25 +46,37 @@ def main():
                 exit()
 
             if event.type == MOUSEBUTTONDOWN:
-                if (mygame.get_item() == event.button):
-                    cur_score += 1
-                    screen.blit(system_images[0], (200,200))
-                else:
-                    screen.blit(system_images[1], (200, 200))
+                if (not endscreenshown):
+                    if (mygame.get_item() == event.button):
+                        cur_score += 1
+                        screen.blit(system_images[0], (200,200))
+                    else:
+                        screen.blit(system_images[1], (200, 200))
+
 
             if event.type == MOUSEBUTTONUP:
-                pygame.time.wait(2000)
-                if (mygame.get_next_item()==None):
-                    gameOver(screen)
-                    mygame.reset()
-                    cur_score = 0
-                    pygame.display.update()
+                if (not endscreenshown):
                     pygame.time.wait(2000)
-                    pygame.event.clear()
-                    #pygame.quit()
-                    #exit()
-                screen.blit(mouse_images[mygame.get_item()], (0, 0))
-                pygame.event.clear()
+                    if (mygame.get_next_item()==None):
+                        screen.blit(pygame.image.load('images/gameover.png'), (150, 350))
+                        rect_playAgain = screen.blit(pygame.image.load('images/repeat.png'), (150, 500))
+                        rect_endGame = screen.blit(pygame.image.load('images/quit.png'), (350, 500))
+                        pygame.display.update()
+                        endscreenshown = True
+                    else:
+                        screen.blit(mouse_images[mygame.get_item()], (0, 0))
+                        pygame.event.clear()
+                else:
+                    if rect_endGame.collidepoint(event.pos):
+                        pygame.quit()
+                        exit()
+                    if rect_playAgain.collidepoint(event.pos):
+                        endscreenshown = False
+                        mygame.reset()
+                        cur_score = 0
+                        pygame.event.clear()
+                        screen.blit(mouse_images[mygame.get_item()], (0, 0))
+                        pygame.display.update()
 
 if __name__ == "__main__":
     main()
