@@ -20,7 +20,7 @@ def main():
     mouse2 = 'images/mouse2.png'
     mouse3 = 'images/mouse3.png'
     screen = pygame.display.set_mode(windowsize, DOUBLEBUF, 32)
-    pygame.display.set_caption("Mouse")
+    pygame.display.set_caption("ale3andro's mouse training - version 0.2")
 
     mouse_images = ( pygame.image.load(mouse0), pygame.image.load(mouse1), pygame.image.load(mouse2), pygame.image.load(mouse3))
     system_images = ( pygame.image.load('images/right.png'), pygame.image.load('images/wrong.png'))
@@ -53,6 +53,12 @@ def main():
                     else:
                         screen.blit(system_images[1], (200, 200))
 
+            if event.type == pygame.KEYDOWN and event.key==pygame.K_r:
+                mygame.reset()
+                cur_score = 0
+                pygame.event.clear()
+                screen.blit(mouse_images[mygame.get_item()], (0, 0))
+                pygame.display.update()
 
             if event.type == MOUSEBUTTONUP:
                 if (not endscreenshown):
