@@ -13,6 +13,11 @@ def printScore(screen, cur_score, cur_item):
     thetext = textfont.render(u"Σκορ: " + str(cur_score) + "/" + str(cur_item+1), True, (255, 0, 0), (255, 255, 255))
     screen.blit(thetext, (500, 40))
 
+def quit():
+    pygame.display.toggle_fullscreen()
+    pygame.quit()
+    exit()
+
 def main():
     pygame.init()
     mouse0 = 'images/mouse0.png'
@@ -21,6 +26,7 @@ def main():
     mouse3 = 'images/mouse3.png'
     screen = pygame.display.set_mode(windowsize, DOUBLEBUF, 32)
     pygame.display.set_caption("ale3andro's mouse training - version 0.2")
+    pygame.display.toggle_fullscreen()
 
     mouse_images = ( pygame.image.load(mouse0), pygame.image.load(mouse1), pygame.image.load(mouse2), pygame.image.load(mouse3))
     system_images = ( pygame.image.load('images/right.png'), pygame.image.load('images/wrong.png'))
@@ -41,8 +47,7 @@ def main():
         printScore(screen, cur_score, mygame.get_item_index())
         for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.quit()
-                exit()
+                quit()
 
             if event.type == MOUSEBUTTONDOWN:
                 if (not endscreenshown):
@@ -59,6 +64,9 @@ def main():
                 screen.blit(mouse_images[mygame.get_item()], (0, 0))
                 pygame.display.update()
 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                quit()
+
             if event.type == MOUSEBUTTONUP:
                 if (not endscreenshown):
                     pygame.time.wait(2000)
@@ -73,8 +81,7 @@ def main():
                         pygame.event.clear()
                 else:
                     if rect_endGame.collidepoint(event.pos):
-                        pygame.quit()
-                        exit()
+                        quit()
                     if rect_playAgain.collidepoint(event.pos):
                         endscreenshown = False
                         mygame.reset()
