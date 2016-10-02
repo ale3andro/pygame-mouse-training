@@ -11,6 +11,9 @@ class GameClass:
     def get_item(self):
         return self.sequence[self.sequence_index]
 
+    def get_item_index(self):
+        return self.sequence_index
+
     def get_next_item(self):
         if self.sequence_index+1 == self.sequence_length:
             self.sequence_index = 0

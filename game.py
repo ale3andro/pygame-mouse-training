@@ -8,9 +8,9 @@ from gameclass import GameClass
 
 windowsize = (700,700)
 
-def printScore(screen, cur_score, max_score):
+def printScore(screen, cur_score, cur_item):
     textfont = pygame.font.SysFont("Ubuntu", 30)
-    thetext = textfont.render(u"Σκορ: " + str(cur_score) + "/" + str(max_score), True, (255, 0, 0), (255, 255, 255))
+    thetext = textfont.render(u"Σκορ: " + str(cur_score) + "/" + str(cur_item+1), True, (255, 0, 0), (255, 255, 255))
     screen.blit(thetext, (500, 40))
 
 def main():
@@ -32,14 +32,13 @@ def main():
     screen.blit(mouse_images[mygame.get_item()], (0,0))
 
     cur_score = 0
-    max_score = mygame.get_items_count()
-    printScore(screen, cur_score, max_score)
+    printScore(screen, cur_score, mygame.get_item_index())
 
     endscreenshown = False
 
     while 1:
         pygame.display.update()
-        printScore(screen, cur_score, max_score)
+        printScore(screen, cur_score, mygame.get_item_index())
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
