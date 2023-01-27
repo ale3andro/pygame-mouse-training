@@ -14,7 +14,7 @@ def printScore(screen, cur_score, cur_item):
     screen.blit(thetext, (500, 40))
 
 def quit():
-    pygame.display.toggle_fullscreen()
+    #pygame.display.toggle_fullscreen()
     pygame.quit()
     exit()
 
@@ -26,7 +26,7 @@ def main():
     mouse3 = 'images/mouse3.png'
     screen = pygame.display.set_mode(windowsize, DOUBLEBUF, 32)
     pygame.display.set_caption("ale3andro's mouse training - version 0.2")
-    pygame.display.toggle_fullscreen()
+    #pygame.display.toggle_fullscreen()
 
     mouse_images = ( pygame.image.load(mouse0), pygame.image.load(mouse1), pygame.image.load(mouse2), pygame.image.load(mouse3))
     system_images = ( pygame.image.load('images/right.png'), pygame.image.load('images/wrong.png'))
