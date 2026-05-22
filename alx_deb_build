@@ -1,0 +1,2 @@
+#!/bin/bash
+dpkg-deb --build ../pygame-mouse-training deb/alxMouseTraining_1.0.0_all.deb
