@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=alxMouseTraining
+Exec=/usr/local/bin/alxMouseTraining
+Icon=alxMouseTraining
+Terminal=false
+Categories=Games;
