@@ -22,13 +22,20 @@ def get_asset_path(filename):
         
     raise FileNotFoundError(f"Could not find asset: {filename}")
 
-def printScore(screen, cur_score, cur_item):
+def printScore(screen, cur_score, cur_item, num_items, endscreenshown):
     textfont = pygame.font.SysFont("Ubuntu", 30)
-    thetext = textfont.render(u"Σκορ: " + str(cur_score) + "/" + str(cur_item+1), True, (255, 0, 0), (255, 255, 255))
+    if (cur_item==0):
+        thetext = textfont.render(u"Σκορ: " + str("0%"), True, (255, 0, 0), (255, 255, 255))
+    else:
+        if (not endscreenshown):
+            thetext = textfont.render(u"Σκορ: " + str(int((cur_score/cur_item)*100)) + u"%", True, (255, 0, 0), (255, 255, 255))
+        else:
+            thetext = textfont.render(u"Σκορ: " + str(int((cur_score/num_items)*100)) + u"%", True, (255, 0, 0), (255, 255, 255))
+    challenge = textfont.render(u"Δοκιμασία: " + str(cur_item+1) + " από " + str(num_items), True, (255, 0, 0), (255, 255, 255))
     screen.blit(thetext, (500, 40))
+    screen.blit(challenge, (30, 40))
 
 def quit():
-    #pygame.display.toggle_fullscreen()
     pygame.quit()
     exit()
 
@@ -39,8 +46,7 @@ def main():
     mouse2 = get_asset_path('mouse2.png')
     mouse3 = get_asset_path('mouse3.png')
     screen = pygame.display.set_mode(windowsize, DOUBLEBUF, 32)
-    pygame.display.set_caption("ale3andro's mouse training - version 0.2")
-    #pygame.display.toggle_fullscreen()
+    pygame.display.set_caption("ale3andro's mouse training - version 1.0.0")
 
     mouse_images = ( pygame.image.load(mouse0), pygame.image.load(mouse1), pygame.image.load(mouse2), pygame.image.load(mouse3))
     system_images = ( pygame.image.load(get_asset_path('right.png')), pygame.image.load(get_asset_path('wrong.png')))
@@ -52,13 +58,15 @@ def main():
     screen.blit(mouse_images[mygame.get_item()], (0,0))
 
     cur_score = 0
-    printScore(screen, cur_score, mygame.get_item_index())
+    num_items = mygame.get_items_count()
+    printScore(screen, cur_score, mygame.get_item_index(), num_items, False)
 
     endscreenshown = False
+    lastChallengeSuccess = False
 
     while 1:
         pygame.display.update()
-        printScore(screen, cur_score, mygame.get_item_index())
+        printScore(screen, cur_score, mygame.get_item_index(), num_items, endscreenshown)
         for event in pygame.event.get():
             if event.type == QUIT:
                 quit()
@@ -66,8 +74,8 @@ def main():
             if event.type == MOUSEBUTTONDOWN:
                 if (not endscreenshown):
                     if (mygame.get_item() == event.button):
-                        cur_score += 1
                         screen.blit(system_images[0], (200,200))
+                        lastChallengeSuccess = True
                     else:
                         screen.blit(system_images[1], (200, 200))
 
@@ -83,12 +91,14 @@ def main():
 
             if event.type == MOUSEBUTTONUP:
                 if (not endscreenshown):
-                    pygame.time.wait(2000)
+                    pygame.time.wait(1000)
+                    if (lastChallengeSuccess):
+                        lastChallengeSuccess = False
+                        cur_score += 1
                     if (mygame.get_next_item()==None):
                         screen.blit(pygame.image.load(get_asset_path('gameover.png')), (150, 350))
                         rect_playAgain = screen.blit(pygame.image.load(get_asset_path('repeat.png')), (150, 500))
                         rect_endGame = screen.blit(pygame.image.load(get_asset_path('quit.png')), (350, 500))
-                        pygame.display.update()
                         endscreenshown = True
                     else:
                         screen.blit(mouse_images[mygame.get_item()], (0, 0))
